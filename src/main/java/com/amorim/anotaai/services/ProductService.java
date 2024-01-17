@@ -8,20 +8,23 @@ import com.amorim.anotaai.domain.product.ProductDTO;
 import com.amorim.anotaai.domain.product.exceptions.ProductNotFoundException;
 import com.amorim.anotaai.repositories.CategoryRepository;
 import com.amorim.anotaai.repositories.ProductRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ProductService {
 
     private CategoryService categoryService;
 
     private ProductRepository repository;
 
-    public ProductService(CategoryService categoryService,ProductRepository productRepository) {
+    public ProductService(CategoryService categoryService, ProductRepository productRepository) {
         this.categoryService = categoryService;
         this.repository = productRepository;
     }
-    public Product insert (ProductDTO productData) {
+
+    public Product insert(ProductDTO productData) {
         Category category = this.categoryService.getById(productData.categoryId())
                 .orElseThrow(CategoryNotFoundException::new);
         Product newProduct = new Product(productData);
@@ -29,7 +32,8 @@ public class ProductService {
         this.repository.save(newProduct);
         return newProduct;
     }
-    public List<Product> getAll(){
+
+    public List<Product> getAll() {
 
         return this.repository.findAll();
     }
@@ -48,12 +52,14 @@ public class ProductService {
         if(!(productData.price() == null)) product.setPrice(productData.price());
 
         this.repository.save(product);
+
+
+        return product;
     }
+    public void delete (String id) {
+        Product product = this.repository.findById(id).
+                orElseThrow(ProductNotFoundException::new);
 
-    public void delete(String id) {
-        Category category = this.repository.findById(id)
-                .orElseThrow(CategoryNotFoundException::new);
-
-        this.repository.delete(category);
+        this.repository.delete(product);
     }
 }

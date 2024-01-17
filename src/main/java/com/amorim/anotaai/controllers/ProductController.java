@@ -2,7 +2,10 @@ package com.amorim.anotaai.controllers;
 
 import com.amorim.anotaai.domain.category.Category;
 import com.amorim.anotaai.domain.category.CategoryDTO;
+import com.amorim.anotaai.domain.product.Product;
+import com.amorim.anotaai.domain.product.ProductDTO;
 import com.amorim.anotaai.services.CategoryService;
+import com.amorim.anotaai.services.ProductService;
 import jakarta.websocket.server.PathParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,32 +15,33 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
-    private CategoryService service;
+    private ProductService service;
 
-    public CategoryController(CategoryService service){
+    public ProductController(ProductService service){
         this.service = service;
     }
 
-
     @PostMapping
-    public ResponseEntity<Category> insert(@RequestBody CategoryDTO categoryData){
-        Category newCategory = this.service.insert(categoryData);
-        return ResponseEntity.ok().body(newCategory);
+    public ResponseEntity<Product> insert(@RequestBody ProductDTO productData){
+        Product newProduct = this.service.insert(productData);
+        return ResponseEntity.ok().body(newProduct);
     }
 
     @GetMapping
-    public ResponseEntity<List<Category>> getAll(){
-        List<Category> categories = this.service.getAll();
-        return ResponseEntity.ok().body(categories);
+    public ResponseEntity<List<Product>> getAll(){
+        List<Product> products = this.service.getAll();
+        return ResponseEntity.ok().body(products);
     }
 
+
     @PutMapping("/{id}")
-    public ResponseEntity<Category> update(@PathParam("id") String id, @RequestBody CategoryDTO categoryData){
-        Category updatedCategory = this.service.update(id, categoryData);
-        return ResponseEntity.ok().body(updatedCategory);
+    public ResponseEntity<Product> update(@PathVariable("id") String id, @RequestBody ProductDTO productData){
+        Product updatedProduct = this.service.update(id, productData);
+        return ResponseEntity.ok().body(updatedProduct);
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Category> delete(@PathParam("id") String id) {
+    public ResponseEntity<Product> delete(@PathVariable("id") String id){
         this.service.delete(id);
         return ResponseEntity.noContent().build();
     }
